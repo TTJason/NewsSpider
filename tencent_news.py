@@ -21,18 +21,26 @@ class Handler(BaseHandler):
 
     crawl_config = {
         'headers': headers,
+        'itag': 'v3',
     }
 
     def __init__(self):
-        self.paths = ['http://news.qq.com/']
+        self.paths = ['http://news.qq.com/',
+                      ]
 
     @every(minutes=24 * 60)
     def on_start(self):
         for path in self.paths:
-            self.crawl(path, callback=self.index_page)
+            self.crawl(path, callback=self.get_list_paths)
+
+    def get_list_paths(self, response):
+        for each in response.doc('#channelNavPart a').items():
+            self.crawl(each.attr.href, callback=self.index_page, fetch_type='js')
 
     def index_page(self, response):
-        for each in response.doc('a[href^="http://news.qq.com/a/"]').items():
+        for each in response.doc('a[href*="/a/"]').items():
+            if "ly.qq.com" in each.attr.href:
+                continue
             self.crawl(each.attr.href, callback=self.detail_page, fetch_type='js')
 
     def detail_page(self, response):
@@ -41,7 +49,7 @@ class Handler(BaseHandler):
         dict = {
             "date": url_split[4],
             "id": script_info['id'],
-            "content": response.doc('#Cnt-Main-Article-QQ p[style="TEXT-INDENT:2em"]').text(),
+            "content": response.doc('#Cnt-Main-Article-QQ p').text(),
             "url": response.url,
             "title": response.doc('.qq_article h1').text(),
             "encoding": response.encoding,
@@ -54,7 +62,12 @@ class Handler(BaseHandler):
                                  url=dict['url'],
                                  date=dict['date'],
                                  cname=dict['cname'])
-        tencent_new.insert()
+        if not dict['is_photo']:
+            tencent_new.insert()
+        for each in response.doc('a[href*="/a/"]').items():
+            if "ly.qq.com" in each.attr.href:
+                continue
+            self.crawl(each.attr.href, callback=self.detail_page, fetch_type='js')
         return dict
 
 
@@ -83,12 +96,13 @@ class TencentNew(object):
 
         sql = "INSERT INTO tencent(id,title, content,url, date, cname)\
                  VALUES ('%s', '%s', '%s','%s', '%s','%s')" % (
-        self.id, self.title, self.content, self.url, self.date, self.cname)
+            self.id, self.title, self.content, self.url, self.date, self.cname)
         print(sql)
-        cursor.execute(sql)
-        db.commit()
-
-        # db.rollback()
+        try:
+            cursor.execute(sql)
+            db.commit()
+        except:
+            db.rollback()
         db.close()
 
     @classmethod
