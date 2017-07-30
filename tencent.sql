@@ -15,6 +15,7 @@ Date: 2017-07-30 11:51:01
 
 SET FOREIGN_KEY_CHECKS=0;
 
+
 -- ----------------------------
 -- Table structure for tencent
 -- ----------------------------
