@@ -1,0 +1,11 @@
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS `lyric`;
+CREATE TABLE `lyric` (
+  `name` varchar(128) NOT NULL,
+  `id` varchar(64) NOT NULL,
+  `lyric` varchar(2048) NOT NULL,
+  `singer` varchar(64) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+SET FOREIGN_KEY_CHECKS=1;
