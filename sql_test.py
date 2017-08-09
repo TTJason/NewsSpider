@@ -14,9 +14,6 @@ def execute(sql_file):
     db.commit()
     db.close()
 
-execute('songs.sql')
-execute('lyric.sql')
-
 db.close()
 
 

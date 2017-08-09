@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS `lyric`;
 CREATE TABLE `lyric` (
   `name` varchar(128) NOT NULL,
   `id` varchar(64) NOT NULL,
-  `lyric` varchar(2048) NOT NULL,
+  `lyric` varchar(8192) NOT NULL,
   `singer` varchar(64) NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
