@@ -26,4 +26,3 @@ def set_name_to_redis(list):
     r = redis.Redis(connection_pool=pool)
 
 
-get_name_from_singer()
