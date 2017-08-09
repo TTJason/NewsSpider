@@ -1,5 +1,5 @@
 
 host = 'localhost'
 username = 'root'
-password = '123456'
+password = '!@#$%^'
 database_name = 'news_dataset'
