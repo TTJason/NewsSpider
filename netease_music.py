@@ -61,6 +61,9 @@ class Handler(BaseHandler):
     def detail_page(self, response):
         data = json.loads(response.content)
         if 'lrc' not in data.keys():
+            id = re.findall(r'\&id=(.*?)\&', response.url, re.S | re.M)[0]
+            l = Lyric(id=id, lyric='None')
+            l.add_lyric()
             return "not has lyric"
         lyric = data['lrc']['lyric'].replace('"', '')
         id = re.findall(r'\&id=(.*?)\&', response.url, re.S | re.M)[0]
@@ -102,13 +105,13 @@ class Lyric(object):
         db = pymysql.connect("localhost", "root", "123456", "news_dataset", charset="utf8")
         cursor = db.cursor()
 
-        sql = sql = 'UPDATE lyric SET lyric = "%s"\
+        sql = 'UPDATE lyric SET lyric = "%s"\
                               WHERE id="%s"' % (self.lyric, self.id)
-        # try:
-        cursor.execute(sql)
-        db.commit()
-        # except:
-        #   db.rollback()
+        try:
+            cursor.execute(sql)
+            db.commit()
+        except:
+            self.insert()
         db.close()
 
 
