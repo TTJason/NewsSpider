@@ -25,7 +25,7 @@ def write_vocab_embedding(model, path):
     np.save(path, embedding_array)
 
 
-train('/Users/sivber/Desktop/NLP_APP/Generate_Lyric/lyric.source',
-      '/Users/sivber/Desktop/NLP_APP/Generate_Lyric/w2v.model',
-      '/Users/sivber/Desktop/NLP_APP/Generate_Lyric/vocab',
-      '/Users/sivber/Desktop/NLP_APP/Generate_Lyric/embedding')
+train('/home/tt/Desktop/NLP_APP/Generate_Lyric/lyric.source',
+      '/home/tt/Desktop/NLP_APP/Generate_Lyric/w2v.model',
+      '/home/tt/Desktop/NLP_APP/Generate_Lyric/vocab',
+      '/home/tt/Desktop/NLP_APP/Generate_Lyric/embedding')

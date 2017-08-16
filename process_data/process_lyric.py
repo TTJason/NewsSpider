@@ -5,8 +5,8 @@ from process_data.ltp_model import *
 from pypinyin import pinyin, lazy_pinyin
 import pypinyin
 
-LTP_DATA_DIR = '/Users/sivber/Desktop/NLP_DATA/ltp_data'
-segmentor = get_segmentor(LTP_DATA_DIR)
+
+segmentor = get_segmentor(config.LTP_DATA_DIR)
 
 
 def process_lyric(text):
@@ -53,7 +53,7 @@ def write_data_from_db_to_file(source_file_name, target_file_name):
     target_file = open(target_file_name, 'w')
     db = pymysql.connect(config.host, config.username, config.password, config.database_name, charset="utf8")
     cursor = db.cursor()
-    sql = "select lyric from lyric"
+    sql = "select lyric from lyric where lyric <> '' and lyric <> 'None'"
     print(sql)
     # 执行SQL语句
     cursor.execute(sql)
@@ -67,5 +67,5 @@ def write_data_from_db_to_file(source_file_name, target_file_name):
     target_file.close()
 
 
-write_data_from_db_to_file('/Users/sivber/Desktop/NLP_APP/Generate_Lyric/lyric.source',
-                           '/Users/sivber/Desktop/NLP_APP/Generate_Lyric/lyric.target')
+write_data_from_db_to_file(config.lyric_source_path,
+                           config.lyric_target_path)
