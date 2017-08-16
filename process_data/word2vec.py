@@ -1,7 +1,7 @@
 from gensim.models import Word2Vec
 from gensim.models import word2vec
 import numpy as np
-
+import config
 
 def train(filename, modelname,vocab_path,embedding_path):
     sents = word2vec.Text8Corpus(filename)
@@ -13,7 +13,7 @@ def train(filename, modelname,vocab_path,embedding_path):
 
 def write_vocab(model, path):
     file = open(path, 'w')
-    file.write('\n'.join(model.wv.index2word))
+    file.write('\n'.join(model.wv.index2word[:10000]))
     file.close()
 
 
@@ -25,7 +25,7 @@ def write_vocab_embedding(model, path):
     np.save(path, embedding_array)
 
 
-train('/home/tt/Desktop/NLP_APP/Generate_Lyric/lyric.source',
-      '/home/tt/Desktop/NLP_APP/Generate_Lyric/w2v.model',
-      '/home/tt/Desktop/NLP_APP/Generate_Lyric/vocab',
-      '/home/tt/Desktop/NLP_APP/Generate_Lyric/embedding')
+train(config.lyric_source_path,
+      config.LYRIC_BASE_PATH+'/w2v.model',
+      config.LYRIC_BASE_PATH+'/vocab',
+      config.LYRIC_BASE_PATH+'/embedding')

@@ -1,10 +1,10 @@
+# coding = utf-8
 import pymysql
 import config
 import re
 from process_data.ltp_model import *
 from pypinyin import pinyin, lazy_pinyin
 import pypinyin
-
 
 segmentor = get_segmentor(config.LTP_DATA_DIR)
 
@@ -30,7 +30,8 @@ def get_pair_rhyme_words(sents):
     #     print('\t'.join(sent.split(' ')))
 
 
-def process_and_write_to_file(text, source_file,target_file):
+# source为整首词,target为往后延一个词的文本
+def process_and_write_to_file(text, source_file, target_file):
     sentence = process_lyric(text)
     if sentence.strip() == '' or len(sentence.strip()) < 20:
         return
@@ -38,6 +39,28 @@ def process_and_write_to_file(text, source_file,target_file):
     sentence.reverse()
     source_sentence = ' '.join(sentence)
     target_sentence = ' '.join(sentence[1:])
+    source_sentence = source_sentence.replace('\n', '.').strip()
+    target_sentence = target_sentence.replace('\n', '.').strip()
+
+    source_file.write(source_sentence)
+    source_file.write('\n')
+
+    target_file.write(target_sentence)
+    target_file.write('\n')
+
+
+# source为韵脚,target为整首词
+def process_last_word_and_write_to_file(text, source_file, target_file):
+    sentence = process_lyric(text)
+    if sentence.strip() == '' or len(sentence.strip()) < 20:
+        return
+    sentence = list(segmentor.segment(sentence))
+    sentence.reverse()
+    source_sentence = ' '.join(sentence)
+    source_sentence = ' '.join(
+        [sent.strip().split(' ')[0] for sent in source_sentence.split(',')
+         if len(sent.strip().split(' ')) > 0])
+    target_sentence = ' '.join(sentence)
     source_sentence = source_sentence.replace('\n', '.').strip()
     target_sentence = target_sentence.replace('\n', '.').strip()
 
@@ -59,7 +82,7 @@ def write_data_from_db_to_file(source_file_name, target_file_name):
     cursor.execute(sql)
     result = cursor.fetchall()
     for l, in result:
-        process_and_write_to_file(l, source_file,target_file)
+        process_last_word_and_write_to_file(l, source_file, target_file)
 
     db.close()
 
