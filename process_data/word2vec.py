@@ -13,7 +13,7 @@ def train(filename, modelname,vocab_path,embedding_path):
 
 def write_vocab(model, path):
     file = open(path, 'w')
-    file.write('\n'.join(model.wv.index2word[:10000]))
+    file.write('\n'.join(model.wv.index2word[:30000]))
     file.close()
 
 
@@ -25,7 +25,7 @@ def write_vocab_embedding(model, path):
     np.save(path, embedding_array)
 
 
-train(config.lyric_source_path,
+train(config.LYRIC_BASE_PATH+'/lyric.target',
       config.LYRIC_BASE_PATH+'/w2v.model',
       config.LYRIC_BASE_PATH+'/vocab',
       config.LYRIC_BASE_PATH+'/embedding')
