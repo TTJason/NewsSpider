@@ -11,10 +11,13 @@ from pyltp import SementicRoleLabeller
 
 
 # 分词
-def get_segmentor(LTP_DATA_DIR):
+def get_segmentor(LTP_DATA_DIR,Lexicon=None):
     cws_model_path = os.path.join(LTP_DATA_DIR, 'cws.model')  # 分词模型路径，模型名称为`cws.model`
     segmentor = Segmentor()  # 初始化实例
-    segmentor.load(cws_model_path)  # 加载模型
+    if Lexicon == None:
+        segmentor.load(cws_model_path)  # 加载模型
+    else:
+        segmentor.load_with_lexicon(cws_model_path,Lexicon)
     return segmentor
 
 

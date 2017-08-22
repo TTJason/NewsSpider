@@ -7,7 +7,7 @@ def write_data_from_db_to_file(file_name):
     source_file = open(file_name, 'w')
     db = pymysql.connect(config.host, config.username, config.password, config.database_name, charset="utf8")
     cursor = db.cursor()
-    sql = "select title from tencent where title <> '' and cname='中国足球'"
+    sql = "select title from tencent where title <> '' "
     print(sql)
     # 执行SQL语句
     cursor.execute(sql)
